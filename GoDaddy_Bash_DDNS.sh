@@ -30,7 +30,7 @@ dnsIp=$(echo $result | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
 # Get public ip address there are several websites that can do this.
 #ret=$(curl -s GET "https://ipinfo.io/json")
 #ret=$(curl -s GET "https://myip.ipip.net/json")
-ret = $(curl -s -X GET 'http://myip.ipip.net/json' \
+ret=$(curl -s -X GET 'http://myip.ipip.net/json' \
       -H 'Connection: keep-alive' \
       -H 'Cache-Control: max-age=0' \
       -H 'Upgrade-Insecure-Requests: 1' \
