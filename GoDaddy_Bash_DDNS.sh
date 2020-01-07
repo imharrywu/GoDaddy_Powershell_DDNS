@@ -42,8 +42,7 @@ ret=$(curl -s -X GET 'http://myip.ipip.net/json' \
 currentIp=$(echo $ret | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
 # echo "currentIp:" $currentIp
 
-if [ x"$dnsIpa" = x"$currentIp" ];
-# if [[ "$dnsIp" =! "$currentIp" ]];
+if [ x"$dnsIp" = x"$currentIp" ];
 #      echo "Ips are equal"
 then
 #       echo "Ips are not equal"
