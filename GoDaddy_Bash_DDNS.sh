@@ -31,15 +31,17 @@ dnsIp=$(echo $result | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
 ret=$(curl -s GET "http://ipinfo.io/json")
 currentIp=$(echo $ret | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
 # echo "currentIp:" $currentIp
-if [ "$dnsIpa" = "$currentIp" ];
+
+if [ x"$dnsIpa" = x"$currentIp" ];
 # if [[ "$dnsIp" =! "$currentIp" ]];
- then
+#      echo "Ips are equal"
+then
 #       echo "Ips are not equal"
         request='[{"data":"'$currentIp'","ttl":3600}]'
 #       echo $request
         nresult=$(curl -i -s -X PUT \
- -H "$headers" \
- -H "Content-Type: application/json" \
- -d $request "https://api.godaddy.com/v1/domains/$domain/records/A/$name")
+            -H "$headers" \
+            -H "Content-Type: application/json" \
+            -d $request "https://api.godaddy.com/v1/domains/$domain/records/A/$name")
 #       echo $nresult
 fi
