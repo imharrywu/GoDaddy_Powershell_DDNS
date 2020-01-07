@@ -12,45 +12,45 @@
 #
 #Update the first 4 variables with your information
 
-domain="your.domain.to.update"   # your domain
-name="name_of_host"     # name of A record to update, e.g. `@'
-key="key"     # key for godaddy developer API
-secret="secret"   # secret for godaddy developer API
+domain="YOUR_DOMAIN_NAME"   # your domain
+name="YOUR_DOMAIN_A_RECORD" # name of A record to update, e.g. `@'
+key="YOUR_API_KEY"          # key for godaddy developer API
+secret="YOUR_API_SECRET"    # secret for godaddy developer API
 
 headers="Authorization: sso-key $key:$secret"
 
 # echo $headers
 
-result=$(curl -s -X GET -H "$headers" \
- "https://api.godaddy.com/v1/domains/$domain/records/A/$name")
+result=$(curl -s -X GET -H "$headers" "https://api.godaddy.com/v1/domains/$domain/records/A/$name")
 
 dnsIp=$(echo $result | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
 # echo "dnsIp:" $dnsIp
 
 # Get public ip address there are several websites that can do this.
-#ret=$(curl -s GET "https://ipinfo.io/json")
-#ret=$(curl -s GET "https://myip.ipip.net/json")
+#ret=$(curl -k -s GET "https://ipinfo.io/json")
+#ret=$(curl -k -s GET "https://myip.ipip.net/json")
 ret=$(curl -s -X GET 'http://myip.ipip.net/json' \
-      -H 'Connection: keep-alive' \
-      -H 'Cache-Control: max-age=0' \
-      -H 'Upgrade-Insecure-Requests: 1' \
-      -H 'User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36' \
-      -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9' \
-      -H 'Accept-Encoding: gzip, deflate' \
-      -H 'Accept-Language: zh-CN,zh;q=0.9,en;q=0.8' \
-      --compressed --insecure)
-currentIp=$(echo $ret | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
-# echo "currentIp:" $currentIp
+     -H 'Connection: keep-alive' \
+     -H 'Cache-Control: max-age=0' \
+     -H 'Upgrade-Insecure-Requests: 1' \
+     -H 'User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36' \
+     -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9' \
+     -H 'Accept-Encoding: gzip, deflate' \
+     -H 'Accept-Language: zh-CN,zh;q=0.9,en;q=0.8' \
+	    --compressed --insecure)
 
-if [ x"$dnsIp" = x"$currentIp" ];
-#      echo "Ips are equal"
-then
-#       echo "Ips are not equal"
-        request='[{"data":"'$currentIp'","ttl":3600}]'
+currentIp=$(echo $ret | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
+
+# echo "currentIp:" $currentIp
+if [ "x$dnsIp" == "x$currentIp" ]; then
+        echo "IPs are equal"
+else
+        echo "IPs are NOT equal"
+        request='[{"data":"'$currentIp'","ttl":86400}]'
 #       echo $request
         nresult=$(curl -i -s -X PUT \
-            -H "$headers" \
-            -H "Content-Type: application/json" \
-            -d $request "https://api.godaddy.com/v1/domains/$domain/records/A/$name")
+	               -H "$headers" \
+	               -H "Content-Type: application/json" \
+	               -d $request "https://api.godaddy.com/v1/domains/$domain/records/A/$name")
 #       echo $nresult
 fi
