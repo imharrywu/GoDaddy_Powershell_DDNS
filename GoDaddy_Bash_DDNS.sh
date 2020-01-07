@@ -7,13 +7,13 @@
 # First go to GoDaddy developer site to create a developer account and get your key and secret
 #
 # https://developer.godaddy.com/getstarted
-# Be aware that there are 2 types of key and secret - one for the test server and one for the production server
+# Be aware that there are 2 types of key and secret - one for the test server(OTE) and one for the production server(Production)
 # Get a key and secret for the production server
 #
 #Update the first 4 variables with your information
 
 domain="your.domain.to.update"   # your domain
-name="name_of_host"     # name of A record to update
+name="name_of_host"     # name of A record to update, e.g. `@'
 key="key"     # key for godaddy developer API
 secret="secret"   # secret for godaddy developer API
 
