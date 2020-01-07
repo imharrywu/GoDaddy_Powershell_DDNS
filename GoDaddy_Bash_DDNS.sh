@@ -19,12 +19,11 @@ secret="YOUR_API_SECRET"    # secret for godaddy developer API
 
 headers="Authorization: sso-key $key:$secret"
 
-# echo $headers
-
 result=$(curl -s -X GET -H "$headers" "https://api.godaddy.com/v1/domains/$domain/records/A/$name")
 
 dnsIp=$(echo $result | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
-# echo "dnsIp:" $dnsIp
+
+echo "dnsIp:" $dnsIp
 
 # Get public ip address there are several websites that can do this.
 #ret=$(curl -k -s GET "https://ipinfo.io/json")
@@ -37,20 +36,19 @@ ret=$(curl -s -X GET 'http://myip.ipip.net/json' \
      -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9' \
      -H 'Accept-Encoding: gzip, deflate' \
      -H 'Accept-Language: zh-CN,zh;q=0.9,en;q=0.8' \
-	    --compressed --insecure)
+     --compressed --insecure)
 
 currentIp=$(echo $ret | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
 
-# echo "currentIp:" $currentIp
+echo "currentIp:" $currentIp
+
 if [ "x$dnsIp" == "x$currentIp" ]; then
         echo "IPs are equal"
 else
         echo "IPs are NOT equal"
         request='[{"data":"'$currentIp'","ttl":86400}]'
-#       echo $request
         nresult=$(curl -i -s -X PUT \
 	               -H "$headers" \
 	               -H "Content-Type: application/json" \
 	               -d $request "https://api.godaddy.com/v1/domains/$domain/records/A/$name")
-#       echo $nresult
 fi
