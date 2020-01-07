@@ -28,7 +28,7 @@ dnsIp=$(echo $result | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
 # echo "dnsIp:" $dnsIp
 
 # Get public ip address there are several websites that can do this.
-ret=$(curl -s GET "http://ipinfo.io/json")
+ret=$(curl -s GET "https://ipinfo.io/json")
 currentIp=$(echo $ret | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
 # echo "currentIp:" $currentIp
 
